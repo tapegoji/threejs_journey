@@ -1,4 +1,4 @@
-import CanvasView from "@/components/canvas";
+import CanvasView from "@/components/Canvas";
 
 export default function Home() {
   return (

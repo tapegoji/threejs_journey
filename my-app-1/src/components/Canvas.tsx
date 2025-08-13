@@ -4,7 +4,7 @@ import { Canvas } from "@react-three/fiber"
 
 export default function CanvasView() {
 return (
-    <div className="w-full h-full bg-gray-900">
+    <div className="w-full h-full">
         <Canvas>
             <mesh>
                 <torusKnotGeometry />
