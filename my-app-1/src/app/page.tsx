@@ -1,9 +1,9 @@
-import CanvasView from "@/components/Canvas";
+import MainCanvas from "@/components/MainCanvas";
 
 export default function Home() {
   return (
     <>
-      <CanvasView />
+      <MainCanvas />
     </>
   );
 }
