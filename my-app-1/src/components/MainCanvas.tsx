@@ -37,21 +37,24 @@ const Model = ({ name, meshRef }: { name: string, meshRef?: any }) => {
 const SphereGeometry = ({ meshRef }: { meshRef?: any }) => (
     <mesh ref={meshRef} scale={1.0} position-x={-2}>
         <sphereGeometry />
-        <meshBasicMaterial color="orange"/>
+        {/* <meshBasicMaterial color="orange"/> */}
+        <meshStandardMaterial color="orange" />
     </mesh>
 )
 
 const BoxGeometry = ({ meshRef }: { meshRef?: any }) => (
     <mesh ref={meshRef} scale={1.5} position-x={2} rotation-y={Math.PI * 0.25}>
         <boxGeometry />
-        <meshBasicMaterial color="mediumpurple" />
+        {/* <meshBasicMaterial color="mediumpurple" /> */}
+        <meshStandardMaterial color="mediumpurple" />
     </mesh>
 )
 
 const PlaneGeometry = ({ meshRef }: { meshRef?: any }) => (
     <mesh ref={meshRef} scale={10.0} position-y={-1} rotation-x={-Math.PI * 0.5}>
         <planeGeometry />
-        <meshBasicMaterial color="greenyellow" side={THREE.DoubleSide} />
+        {/* <meshBasicMaterial color="greenyellow" side={THREE.DoubleSide} /> */}
+        <meshStandardMaterial color="greenyellow" side={THREE.DoubleSide} />
     </mesh>
 )
 const useRefs = () => ({
@@ -72,11 +75,8 @@ const AnimationLoop = ({ meshRef, rotationAxis }:
 }; 
 
 const CustomOrbitControls = () => {
-    const {
-    camera,
-    gl: { domElement },
-    } = useThree()
-    return <orbitControls args={[camera, domElement]} />
+    const {camera, gl} = useThree()
+    return <orbitControls args={[camera, gl.domElement]} />
 }
 
 export default function MainCanvas() {
@@ -84,6 +84,8 @@ export default function MainCanvas() {
 
 return (
     <Canvas>
+        <directionalLight position={[1, 2, 3]} intensity={4.5} />
+        <ambientLight intensity={1.5} />
         <group ref={groupRef}>
             <Model meshRef={sphereRef} name="SphereGeometry" />
             <Model meshRef={boxRef} name="BoxGeometry" />
