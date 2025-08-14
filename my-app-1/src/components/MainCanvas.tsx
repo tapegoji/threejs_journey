@@ -105,7 +105,7 @@ return (
         gl={{ 
             // antialias: true, // default by r3f
             // toneMapping: THREE.ACESFilmicToneMapping, // default by r3f
-            // outputColorSpace: THREE.SRGBColorSpace // default by r3f
+            outputColorSpace: THREE.SRGBColorSpace // default by r3f
         }}>
         <camera {...cameraSettings} />
         <directionalLight position={[1, 2, 3]} intensity={4.5} />
