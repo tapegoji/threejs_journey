@@ -101,9 +101,11 @@ return (
         // shadows
         // gl={ {antialias: false} } // to gain performance and you don't care about the quality
         // orthographic
-        gl={{ antialias: true,
-            toneMapping: THREE.ACESFilmicToneMapping,
-            outputColorSpace: THREE.SRGBColorSpace
+        // dpr={[1, 2]}  // default by r3f
+        gl={{ 
+            // antialias: true, // default by r3f
+            // toneMapping: THREE.ACESFilmicToneMapping, // default by r3f
+            // outputColorSpace: THREE.SRGBColorSpace // default by r3f
         }}>
         <camera {...cameraSettings} />
         <directionalLight position={[1, 2, 3]} intensity={4.5} />
