@@ -69,11 +69,11 @@ const AnimationLoop = ({ meshRef, rotationAxis }:
     { meshRef: any, rotationAxis: 'x' | 'y' | 'z' }) => {
     useFrame((state, delta) => {
         if (meshRef.current) {
-            // meshRef.current.rotation[rotationAxis] += delta;
-            const angle = state.clock.elapsedTime ;
-            state.camera.position.x = Math.sin(angle) * 8;
-            state.camera.position.z = Math.cos(angle) * 8;
-            state.camera.lookAt(0, 0, 0);
+            meshRef.current.rotation[rotationAxis] += delta;
+            // const angle = state.clock.elapsedTime ;
+            // state.camera.position.x = Math.sin(angle) * 8;
+            // state.camera.position.z = Math.cos(angle) * 8;
+            // state.camera.lookAt(0, 0, 0);
         }
     });
     return null;
@@ -97,8 +97,15 @@ export default function MainCanvas() {
 
 return (
     <Canvas
+        // flat   // no tonemapping,
+        // shadows
+        // gl={ {antialias: false} } // to gain performance and you don't care about the quality
         // orthographic
-        camera={cameraSettings}>
+        gl={{ antialias: true,
+            toneMapping: THREE.ACESFilmicToneMapping,
+            outputColorSpace: THREE.SRGBColorSpace
+        }}>
+        <camera {...cameraSettings} />
         <directionalLight position={[1, 2, 3]} intensity={4.5} />
         <ambientLight intensity={1.5} />
         <group ref={groupRef}>
@@ -110,7 +117,7 @@ return (
         
         
         {/* <OrbitControls enableDamping={false} /> */}
-        {/* <CustomOrbitControls /> */}
+        <CustomOrbitControls />
         <GizmoHelper>
             <GizmoViewport />
         </GizmoHelper>
