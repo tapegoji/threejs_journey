@@ -7,7 +7,7 @@ export default function CustomObject() {
 
     const geometryRef = useRef<THREE.BufferGeometry>(null);
 
-    const verticesCount = 3 * 3 /* 10 triangles * 3 vertices per triangle */
+    const verticesCount = 10 * 3 /* 10 triangles * 3 vertices per triangle */
 
     const positions = useMemo(() => {
         const positions = new Float32Array(verticesCount * 3);

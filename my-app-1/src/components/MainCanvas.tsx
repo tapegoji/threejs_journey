@@ -12,8 +12,6 @@ import { GizmoHelper,
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import CustomObject from "./CustomObject"
 
-
-
 extend({ OrbitControls })
 
 declare module '@react-three/fiber' {
@@ -71,7 +69,11 @@ const AnimationLoop = ({ meshRef, rotationAxis }:
     { meshRef: any, rotationAxis: 'x' | 'y' | 'z' }) => {
     useFrame((state, delta) => {
         if (meshRef.current) {
-            meshRef.current.rotation[rotationAxis] += delta;
+            // meshRef.current.rotation[rotationAxis] += delta;
+            const angle = state.clock.elapsedTime ;
+            state.camera.position.x = Math.sin(angle) * 8;
+            state.camera.position.z = Math.cos(angle) * 8;
+            state.camera.lookAt(0, 0, 0);
         }
     });
     return null;
@@ -84,9 +86,19 @@ const CustomOrbitControls = () => {
 
 export default function MainCanvas() {
     const { boxRef, sphereRef, planeRef, groupRef } = useRefs()
+    
+    const cameraSettings = {
+        // zoom: 100,
+        fov: 100,
+        near: 0.1,
+        far: 100,
+        position: [0, 2, 5] as [number, number, number]
+    };
 
 return (
-    <Canvas>
+    <Canvas
+        // orthographic
+        camera={cameraSettings}>
         <directionalLight position={[1, 2, 3]} intensity={4.5} />
         <ambientLight intensity={1.5} />
         <group ref={groupRef}>
@@ -98,7 +110,7 @@ return (
         
         
         {/* <OrbitControls enableDamping={false} /> */}
-        <CustomOrbitControls />
+        {/* <CustomOrbitControls /> */}
         <GizmoHelper>
             <GizmoViewport />
         </GizmoHelper>
