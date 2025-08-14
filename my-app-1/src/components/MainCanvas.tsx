@@ -10,13 +10,16 @@ import { GizmoHelper,
         // OrbitControls, 
         PivotControls} from "@react-three/drei"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import CustomObject from "./CustomObject"
+
+
 
 extend({ OrbitControls })
 
 declare module '@react-three/fiber' {
-  interface ThreeElements {
+interface ThreeElements {
     orbitControls: any
-  }
+}
 }
 
 const Model = ({ name, meshRef }: { name: string, meshRef?: any }) => {
@@ -91,6 +94,9 @@ return (
             <Model meshRef={boxRef} name="BoxGeometry" />
         </group>
         <Model meshRef={planeRef} name="PlaneGeometry" />
+        <CustomObject />
+        
+        
         {/* <OrbitControls enableDamping={false} /> */}
         <CustomOrbitControls />
         <GizmoHelper>
