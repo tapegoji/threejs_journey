@@ -7,18 +7,19 @@ import { Canvas,
         useFrame} from "@react-three/fiber"
 import { GizmoHelper,
         GizmoViewport,
-        // OrbitControls, 
+        OrbitControls,
+        Html, 
         PivotControls} from "@react-three/drei"
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import CustomObject from "./CustomObject"
 
-extend({ OrbitControls })
+// extend({ OrbitControls })
 
-declare module '@react-three/fiber' {
-interface ThreeElements {
-    orbitControls: any
-}
-}
+// declare module '@react-three/fiber' {
+// interface ThreeElements {
+//     orbitControls: any
+// }
+// }
 
 const Model = ({ name, meshRef }: { name: string, meshRef?: any }) => {
     const components = {
@@ -48,6 +49,7 @@ const BoxGeometry = ({ meshRef }: { meshRef?: any }) => (
         <boxGeometry />
         {/* <meshBasicMaterial color="mediumpurple" /> */}
         <meshStandardMaterial color="mediumpurple" />
+        <Html position={ [ 1, 1, 0 ] }>That's a box 👍</Html>
     </mesh>
 )
 
@@ -110,20 +112,25 @@ return (
         <camera {...cameraSettings} />
         <directionalLight position={[1, 2, 3]} intensity={4.5} />
         <ambientLight intensity={1.5} />
-        <group ref={groupRef}>
-            <Model meshRef={sphereRef} name="SphereGeometry" />
-            <Model meshRef={boxRef} name="BoxGeometry" />
-        </group>
+        <PivotControls
+            anchor={[1, 1, 1]} // pivot point
+            enabled={false} // enable/disable pivot controls
+        >
+            <group ref={groupRef}>
+                <Model meshRef={sphereRef} name="SphereGeometry" />
+                <Model meshRef={boxRef} name="BoxGeometry" />
+            </group>
+        </PivotControls>
         <Model meshRef={planeRef} name="PlaneGeometry" />
-        <CustomObject />
+        {/* <CustomObject /> */}
         
         
-        {/* <OrbitControls enableDamping={false} /> */}
-        <CustomOrbitControls />
+        <OrbitControls enableDamping={false} makeDefault/>
+        {/* <CustomOrbitControls /> */}
         <GizmoHelper>
             <GizmoViewport />
         </GizmoHelper>
-        <AnimationLoop meshRef={boxRef} rotationAxis="y" />
+        {/* <AnimationLoop meshRef={boxRef} rotationAxis="y" /> */}
     </Canvas>
 )
 }
