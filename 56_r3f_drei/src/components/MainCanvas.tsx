@@ -1,5 +1,5 @@
 'use client'
-import { useRef } from "react"
+import { StrictMode, useRef } from "react"
 import * as THREE from "three"
 import { Canvas,
         extend,
@@ -119,50 +119,52 @@ export default function MainCanvas() {
     };
 
 return (
-    <Canvas
-        // flat   // no tonemapping,
-        // shadows
-        // gl={ {antialias: false} } // to gain performance and you don't care about the quality
-        // orthographic
-        // dpr={[1, 2]}  // default by r3f
-        gl={{ 
-            // antialias: true, // default by r3f
-            // toneMapping: THREE.ACESFilmicToneMapping, // default by r3f
-            outputColorSpace: THREE.SRGBColorSpace // default by r3f
-        }}>
-        <camera {...cameraSettings} />
-        <directionalLight position={[1, 2, 3]} intensity={4.5} />
-        <ambientLight intensity={1.5} />
-        <PivotControls
-            anchor={[1, 1, 1]} // pivot point
-            enabled={false} // enable/disable pivot controls
-            fixed
-            scale={100} // scale of the pivot controls
-        >
-            <group ref={groupRef}>
-                <Model meshRef={sphereRef} name="SphereGeometry" />
-                <Model meshRef={boxRef} name="BoxGeometry" />
-            </group>
-        </PivotControls>
-        <Float>
-            <Text  
-                fontSize={ 1 }
-                color="salmon" 
+    <StrictMode>
+        <Canvas
+            // flat   // no tonemapping,
+            // shadows
+            // gl={ {antialias: false} } // to gain performance and you don't care about the quality
+            // orthographic
+            // dpr={[1, 2]}  // default by r3f
+            gl={{ 
+                // antialias: true, // default by r3f
+                // toneMapping: THREE.ACESFilmicToneMapping, // default by r3f
+                outputColorSpace: THREE.SRGBColorSpace // default by r3f
+            }}>
+            <camera {...cameraSettings} />
+            <directionalLight position={[1, 2, 3]} intensity={4.5} />
+            <ambientLight intensity={1.5} />
+            <PivotControls
+                anchor={[1, 1, 1]} // pivot point
+                enabled={false} // enable/disable pivot controls
+                fixed
+                scale={100} // scale of the pivot controls
             >
-                That's a sphere 👍
-                <meshNormalMaterial side={THREE.DoubleSide} />
-            </Text>
-        </Float>
-        <Model meshRef={planeRef} name="PlaneGeometry" />
-        {/* <CustomObject /> */}
-        
-        
-        <OrbitControls enableDamping={false} makeDefault/>
-        {/* <CustomOrbitControls /> */}
-        <GizmoHelper>
-            <GizmoViewport />
-        </GizmoHelper>
-        {/* <AnimationLoop meshRef={boxRef} rotationAxis="y" /> */}
-    </Canvas>
+                <group ref={groupRef}>
+                    <Model meshRef={sphereRef} name="SphereGeometry" />
+                    <Model meshRef={boxRef} name="BoxGeometry" />
+                </group>
+            </PivotControls>
+            <Float>
+                <Text  
+                    fontSize={ 1 }
+                    color="salmon" 
+                >
+                    That's a sphere 👍
+                    <meshNormalMaterial side={THREE.DoubleSide} />
+                </Text>
+            </Float>
+            <Model meshRef={planeRef} name="PlaneGeometry" />
+            {/* <CustomObject /> */}
+            
+            
+            <OrbitControls enableDamping={false} makeDefault/>
+            {/* <CustomOrbitControls /> */}
+            <GizmoHelper>
+                <GizmoViewport />
+            </GizmoHelper>
+            {/* <AnimationLoop meshRef={boxRef} rotationAxis="y" /> */}
+        </Canvas>
+    </StrictMode>
 )
 }
