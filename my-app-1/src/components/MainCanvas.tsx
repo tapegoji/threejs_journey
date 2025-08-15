@@ -9,6 +9,9 @@ import { GizmoHelper,
         GizmoViewport,
         OrbitControls,
         Html, 
+        Text,
+        Float,
+        MeshReflectorMaterial,
         PivotControls} from "@react-three/drei"
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import CustomObject from "./CustomObject"
@@ -40,7 +43,7 @@ const SphereGeometry = ({ meshRef }: { meshRef?: any }) => (
     <mesh ref={meshRef} scale={1.0} position-x={-2}>
         <sphereGeometry />
         {/* <meshBasicMaterial color="orange"/> */}
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial color="orange" />        
     </mesh>
 )
 
@@ -67,7 +70,15 @@ const PlaneGeometry = ({ meshRef }: { meshRef?: any }) => (
     <mesh ref={meshRef} scale={10.0} position-y={-1} rotation-x={-Math.PI * 0.5}>
         <planeGeometry />
         {/* <meshBasicMaterial color="greenyellow" side={THREE.DoubleSide} /> */}
-        <meshStandardMaterial color="greenyellow" side={THREE.DoubleSide} />
+        {/* <meshStandardMaterial color="greenyellow" side={THREE.DoubleSide} /> */}
+        <MeshReflectorMaterial
+            resolution={1024}
+            blur={ [ 1000, 1000 ] }
+            mixBlur={ 0 }
+            mirror={0.90}
+            color="greenyellow"
+            // side={THREE.DoubleSide}
+        />
     </mesh>
 )
 const useRefs = () => ({
@@ -133,6 +144,15 @@ return (
                 <Model meshRef={boxRef} name="BoxGeometry" />
             </group>
         </PivotControls>
+        <Float>
+            <Text  
+                fontSize={ 1 }
+                color="salmon" 
+            >
+                That's a sphere 👍
+                <meshNormalMaterial side={THREE.DoubleSide} />
+            </Text>
+        </Float>
         <Model meshRef={planeRef} name="PlaneGeometry" />
         {/* <CustomObject /> */}
         
