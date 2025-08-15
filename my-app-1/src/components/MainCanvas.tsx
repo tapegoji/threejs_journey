@@ -49,7 +49,17 @@ const BoxGeometry = ({ meshRef }: { meshRef?: any }) => (
         <boxGeometry />
         {/* <meshBasicMaterial color="mediumpurple" /> */}
         <meshStandardMaterial color="mediumpurple" />
-        <Html position={ [ 1, 1, 0 ] }>That's a box 👍</Html>
+        <Html 
+            distanceFactor={6} 
+            center 
+            wrapperClass="geometry-label" 
+            position={[0, 1, 0]}
+            rotation={[Math.PI / 2, 0, 0]} 
+            occlude
+        >
+            That's a box 👍
+        </Html>
+
     </mesh>
 )
 
@@ -115,6 +125,8 @@ return (
         <PivotControls
             anchor={[1, 1, 1]} // pivot point
             enabled={false} // enable/disable pivot controls
+            fixed
+            scale={100} // scale of the pivot controls
         >
             <group ref={groupRef}>
                 <Model meshRef={sphereRef} name="SphereGeometry" />
