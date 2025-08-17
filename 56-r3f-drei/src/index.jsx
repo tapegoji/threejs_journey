@@ -141,6 +141,11 @@ function Scene() {
             
             {/* OrbitControls only outside XR */}
             {!isInXR && <OrbitControls enableDamping makeDefault />}
+            
+            {/* GizmoHelper for orientation reference */}
+            <GizmoHelper alignment="top-right" margin={[80, 80]}>
+                <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
+            </GizmoHelper>
         </>
     )
 }
