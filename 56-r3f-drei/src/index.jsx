@@ -8,7 +8,7 @@ import { useRef } from 'react'
 
 function JoystickLocomotion({ children, speed = 2, ...props }) {
     const ref = useRef()
-    const controller = useXRInputSourceState('controller', 'right')
+    const controller = useXRInputSourceState('controller', 'left')
     const { camera } = useThree()
     
     useFrame((_, delta) => {
