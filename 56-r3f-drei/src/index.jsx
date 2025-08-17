@@ -53,7 +53,7 @@ function JoystickLocomotion({ children, speed = 2, ...props }) {
         // Apply movement based on camera orientation
         const movement = new THREE.Vector3()
         movement.addScaledVector(right, xInput * speed * delta) // Left/right movement
-        movement.addScaledVector(forward, zInput * speed * delta) // Forward/backward movement
+        movement.addScaledVector(forward, -zInput * speed * delta) // Forward/backward movement (negated)
         movement.y = yInput * speed * delta // Vertical movement
         
         // Apply the calculated movement
