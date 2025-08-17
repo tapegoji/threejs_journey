@@ -1,6 +1,6 @@
 import './style.css'
 import ReactDOM from 'react-dom/client'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { createXRStore, XR, XROrigin, useXR, useXRInputSourceState } from '@react-three/xr'
 import { OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
@@ -9,6 +9,7 @@ import { useRef } from 'react'
 function JoystickLocomotion({ children, speed = 2, ...props }) {
     const ref = useRef()
     const controller = useXRInputSourceState('controller', 'right')
+    const { camera } = useThree()
     
     useFrame((_, delta) => {
         if (ref.current == null || controller == null) {
@@ -36,10 +37,27 @@ function JoystickLocomotion({ children, speed = 2, ...props }) {
             yInput -= 1 // Move down when squeeze is pressed
         }
         
-        // Apply movement with speed and delta time
-        ref.current.position.x += xInput * speed * delta
-        ref.current.position.y += yInput * speed * delta
-        ref.current.position.z -= zInput * speed * delta // Negative for forward/backward
+        // Calculate movement direction based on camera orientation
+        const forward = new THREE.Vector3()
+        const right = new THREE.Vector3()
+        
+        // Get camera's forward direction (negative Z in camera space)
+        camera.getWorldDirection(forward)
+        forward.y = 0 // Keep movement horizontal
+        forward.normalize()
+        
+        // Get camera's right direction (cross product of up and forward)
+        right.crossVectors(forward, new THREE.Vector3(0, 1, 0))
+        right.normalize()
+        
+        // Apply movement based on camera orientation
+        const movement = new THREE.Vector3()
+        movement.addScaledVector(right, xInput * speed * delta) // Left/right movement
+        movement.addScaledVector(forward, zInput * speed * delta) // Forward/backward movement
+        movement.y = yInput * speed * delta // Vertical movement
+        
+        // Apply the calculated movement
+        ref.current.position.add(movement)
     })
     
     return (
