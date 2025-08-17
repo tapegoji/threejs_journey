@@ -1,10 +1,53 @@
 import './style.css'
 import ReactDOM from 'react-dom/client'
-import { Canvas } from '@react-three/fiber'
-import { createXRStore, XR, XROrigin, useXR } from '@react-three/xr'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { createXRStore, XR, XROrigin, useXR, useXRInputSourceState } from '@react-three/xr'
 import { OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
+import { useRef } from 'react'
 
+function JoystickLocomotion({ children, speed = 2, ...props }) {
+    const ref = useRef()
+    const controller = useXRInputSourceState('controller', 'right')
+    
+    useFrame((_, delta) => {
+        if (ref.current == null || controller == null) {
+            return
+        }
+        
+        const thumbstickState = controller.gamepad['xr-standard-thumbstick']
+        const triggerState = controller.gamepad['xr-standard-trigger']
+        const squeezeState = controller.gamepad['xr-standard-squeeze']
+        
+        if (thumbstickState == null) {
+            return
+        }
+        
+        // Get thumbstick input for X and Z movement
+        const xInput = thumbstickState.xAxis ?? 0
+        const zInput = thumbstickState.yAxis ?? 0
+        
+        // Get Y-axis input from trigger (up) and squeeze (down) buttons
+        let yInput = 0
+        if (triggerState?.state === 'pressed') {
+            yInput += 1 // Move up when trigger is pressed
+        }
+        if (squeezeState?.state === 'pressed') {
+            yInput -= 1 // Move down when squeeze is pressed
+        }
+        
+        // Apply movement with speed and delta time
+        ref.current.position.x += xInput * speed * delta
+        ref.current.position.y += yInput * speed * delta
+        ref.current.position.z -= zInput * speed * delta // Negative for forward/backward
+    })
+    
+    return (
+        <XROrigin ref={ref} {...props}>
+            {children}
+        </XROrigin>
+    )
+}
 
 const store = createXRStore()
 
@@ -16,7 +59,7 @@ root.render(
         <button onClick={() => store.enterAR()}>Enter AR</button>
         <Canvas>
         <XR store={store}>
-            <XROrigin position={[1, 1, 1]}/>
+            <JoystickLocomotion position={[1, 1, 1]} speed={2} />
                 {/* <LeftStickLocomotion speed={2} /> */}
             <directionalLight position={ [ 1, 2, 3 ] } intensity={ 4.5 } />
             <ambientLight intensity={ 1.5 } />
