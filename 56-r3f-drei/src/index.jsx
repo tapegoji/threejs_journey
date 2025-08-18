@@ -2,10 +2,10 @@ import './style.css'
 import ReactDOM from 'react-dom/client'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { createXRStore, XR, XROrigin, useXR, useXRInputSourceState } from '@react-three/xr'
-import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei'
+import { OrbitControls, GizmoHelper, GizmoViewport, useGLTF } from '@react-three/drei'
 import { PivotHandles } from '@react-three/handle'
 import * as THREE from 'three'
-import { useRef, useState } from 'react'
+import { useRef, useState, Suspense } from 'react'
 
 function JoystickLocomotion({ children, speed = 2, ...props }) {
     const ref = useRef()
@@ -102,6 +102,11 @@ function SelectableObject({ children, position, scale, objectId, selectedObject,
     )
 }
 
+function VdivModel(props) {
+    const { scene } = useGLTF('./vdiv.gltf')
+    return <primitive object={scene} scale={100} {...props} />
+}
+
 function Scene() {
     const [selectedObject, setSelectedObject] = useState(null)
     const { session } = useXR()
@@ -109,43 +114,15 @@ function Scene() {
     
     return (
         <>
-            <JoystickLocomotion position={[1, 1, 1]} speed={2} />
             <directionalLight position={ [ 1, 2, 3 ] } intensity={ 4.5 } />
             <ambientLight intensity={ 1.5 } />
 
-            <SelectableObject 
-                position={[-2, 0, 0]} 
-                objectId="sphere"
-                selectedObject={selectedObject}
-                setSelectedObject={setSelectedObject}
-                color="orange"
-            >
-                <sphereGeometry />
-            </SelectableObject>
-
-            <SelectableObject 
-                position={[2, 0, 0]} 
-                scale={1.5}
-                objectId="cube"
-                selectedObject={selectedObject}
-                setSelectedObject={setSelectedObject}
-                color="mediumpurple"
-            >
-                <boxGeometry />
-            </SelectableObject>
-
-            <mesh position-y={ - 1 } rotation-x={ - Math.PI * 0.5 } scale={ 10 }>
-                <planeGeometry />
-                <meshStandardMaterial color="greenyellow" />
-            </mesh>
+            <Suspense fallback={null}>
+                <VdivModel position={[0, 0, 0]} scale={100} />
+            </Suspense>
             
             {/* OrbitControls only outside XR */}
             {!isInXR && <OrbitControls enableDamping makeDefault />}
-            
-            {/* GizmoHelper for orientation reference */}
-            <GizmoHelper alignment="top-right" margin={[80, 80]}>
-                <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
-            </GizmoHelper>
         </>
     )
 }
